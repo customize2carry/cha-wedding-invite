@@ -163,10 +163,7 @@ window.addEventListener("scroll", () => {
 }, { passive: true });
 window.addEventListener("resize", deityUpdate);
 
-// ---------- Start ----------
-render();
-
-// ---------- Flower garlands ----------
+// ---------- Flower garlands (swaying like in a breeze) ----------
 document.querySelectorAll(".garland").forEach((g, gi) => {
   const pattern = ["orange", "yellow", "orange", "rose", "yellow", "orange"];
   let parent = g;
@@ -186,3 +183,6 @@ document.querySelectorAll(".garland").forEach((g, gi) => {
   tassel.className = "tassel";
   parent.appendChild(tassel);
 });
+
+// ---------- Start ----------
+render();
