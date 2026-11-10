@@ -1,68 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Wedding Invitation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Noto+Serif+Kannada:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="locked">
 
-  <!-- COVER WITH CURTAIN -->
+  <!-- Language switch (top right) -->
+  <div class="lang-switch">
+    <button data-lang="kn">ಕನ್ನಡ</button>
+    <button data-lang="en">English</button>
+  </div>
+
+  <div id="petals"></div>
+
+  <!-- COVER: curtain + Ganesha at top -->
   <section id="cover">
     <div class="curtain left"></div>
     <div class="curtain right"></div>
     <div class="cover-content">
-      <p class="small">Please open to</p>
-      <button id="openBtn">Open Invitation</button>
+      <img class="ganesha" data-img="ganesha" alt="Ganesha" />
+      <p class="verse" data-t="verse"></p>
+      <button id="openBtn" data-t="open"></button>
     </div>
   </section>
 
   <main id="invite" class="hidden">
 
-    <!-- HERO -->
-    <section class="hero reveal">
-      <p class="small" id="tagline"></p>
-      <h1><span id="groom"></span><br /><em>weds</em><br /><span id="bride"></span></h1>
-      <div class="countdown" id="countdown">
-        <div><b id="cd-d">0</b><span>Days</span></div>
-        <div><b id="cd-h">0</b><span>Hours</span></div>
-        <div><b id="cd-m">0</b><span>Mins</span></div>
-        <div><b id="cd-s">0</b><span>Secs</span></div>
+    <!-- 1. HERO -->
+    <section class="sec sec-hero">
+      <div class="toran"></div>
+      <div class="inner hero-inner">
+        <img class="ganesha reveal" data-img="ganesha" alt="Ganesha" />
+        <p class="verse reveal" data-t="verse"></p>
+        <p class="small reveal" data-t="tagline"></p>
+        <h1 class="reveal">
+          <span id="groom" class="shimmer"></span>
+          <em data-t="weds"></em>
+          <span id="bride" class="shimmer"></span>
+        </h1>
+        <p class="date reveal" id="dateText"></p>
+        <p class="cd-label reveal" data-t="cdLabel"></p>
+        <div class="countdown reveal">
+          <div><b id="cd-d">0</b><span data-t="days"></span></div>
+          <div><b id="cd-h">0</b><span data-t="hours"></span></div>
+          <div><b id="cd-m">0</b><span data-t="mins"></span></div>
+          <div><b id="cd-s">0</b><span data-t="secs"></span></div>
+        </div>
+        <p class="scroll-hint" data-t="scroll"></p>
       </div>
-      <p class="scroll-hint">Scroll down ↓</p>
     </section>
 
-    <!-- FLIP NOTE CARD -->
-    <section class="reveal">
-      <h2 id="noteTitle"></h2>
-      <div class="flip" id="flipCard">
-        <div class="flip-inner">
-          <div class="flip-front"><p>Tap to open</p></div>
-          <div class="flip-back"><p id="noteText"></p></div>
+    <!-- 2. DEITIES (scroll-driven) -->
+    <section id="deityScroll" class="sec-deity">
+      <div class="sticky" id="deitySticky">
+        <div class="rays"></div>
+        <div id="deityStage">
+          <img class="deity-img" data-img="deity" alt="Sri Venkateshwara and Padmavathi" />
+          <p class="deity-caption" data-t="deityCaption"></p>
         </div>
       </div>
     </section>
 
-    <!-- FAMILIES -->
-    <section class="reveal">
-      <h2>Our Families</h2>
-      <div class="families" id="families"></div>
+    <!-- 3. NOTE -->
+    <section class="sec sec-note">
+      <div class="inner">
+        <h2 class="reveal" id="noteTitle"></h2>
+        <div class="flip reveal" id="flipCard">
+          <div class="flip-inner">
+            <div class="flip-front"><p><span class="orn-big">❖</span><br /><span data-t="tapOpen"></span></p></div>
+            <div class="flip-back"><p id="noteText"></p></div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- EVENTS -->
-    <section class="reveal">
-      <h2>Celebrations</h2>
-      <div id="events"></div>
+    <!-- 4. FAMILIES -->
+    <section class="sec sec-family">
+      <div class="inner">
+        <h2 class="reveal" data-t="familiesTitle"></h2>
+        <div id="families"></div>
+      </div>
     </section>
 
-    <!-- THANK YOU -->
-    <section class="reveal thanks">
-      <h2 id="tyTitle"></h2>
-      <p id="tyText"></p>
-      <p class="sign" id="tySign"></p>
+    <!-- 5. EVENTS -->
+    <section class="sec sec-events">
+      <div class="inner">
+        <h2 class="reveal" data-t="eventsTitle"></h2>
+        <div id="events"></div>
+      </div>
+    </section>
+
+    <!-- 6. THANK YOU -->
+    <section class="sec sec-thanks">
+      <div class="toran flip-down"></div>
+      <div class="inner">
+        <h2 class="reveal" id="tyTitle"></h2>
+        <p class="reveal" id="tyText"></p>
+        <p class="sign reveal" id="tySign"></p>
+        <div class="diya reveal">🪔</div>
+      </div>
     </section>
 
   </main>
