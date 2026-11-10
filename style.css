@@ -240,29 +240,14 @@ h2::after {
 
 /* 6. THANK YOU — saffron */
 .sec-thanks {
-  padding-bottom: 110px; border-bottom: none;
+  padding-top: 90px; padding-bottom: 110px; border-bottom: none;
   background: linear-gradient(180deg, #ff9f1c, #ffd17a 55%, #fff3d6);
 }
+.sec-thanks .inner { padding: 0 46px; }
 .sec-thanks p { line-height: 1.8; font-size: 19px; }
 .sign { margin-top: 16px; color: var(--maroon); font-weight: 700; }
-.diya { font-size: 44px; margin-top: 18px; animation: flicker 1.6s ease-in-out infinite alternate; }
-@keyframes flicker {
-  from { filter: drop-shadow(0 0 4px #ffb300); transform: scale(1); }
-  to   { filter: drop-shadow(0 0 16px #ff6f00); transform: scale(1.1); }
-}
-
-/* SCROLL REVEAL */
-.reveal { opacity: 0; transform: translate(var(--x, 0), var(--y, 30px)); transition: opacity .9s ease, transform .9s ease; }
-.reveal.show { opacity: 1; transform: none; }
-.card:nth-child(odd)  { --x: -45px; --y: 0; }
-.card:nth-child(even) { --x: 45px;  --y: 0; }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition-duration: .01s !important; }
-}
 
 /* TWO FLOWER GARLANDS */
-.sec-thanks .inner { padding: 0 46px; }
 .garland {
   position: absolute; top: 0; z-index: 1;
   display: flex; flex-direction: column; align-items: center;
@@ -297,4 +282,14 @@ h2::after {
   width: 14px; height: 30px; margin-top: -2px;
   background: linear-gradient(180deg, #c9a227, #8a6a10);
   border-radius: 3px 3px 50% 50%;
+}
+
+/* SCROLL REVEAL */
+.reveal { opacity: 0; transform: translate(var(--x, 0), var(--y, 30px)); transition: opacity .9s ease, transform .9s ease; }
+.reveal.show { opacity: 1; transform: none; }
+.card:nth-child(odd)  { --x: -45px; --y: 0; }
+.card:nth-child(even) { --x: 45px;  --y: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01s !important; }
 }
