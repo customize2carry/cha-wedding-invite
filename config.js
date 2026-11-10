@@ -73,7 +73,7 @@ const INVITE = {
   // Fixed labels used across the page
   ui: {
     verse: { kn: "॥ ಶ್ರೀ ಗಣೇಶಾಯ ನಮಃ ॥", en: "॥ Shri Ganeshaya Namah ॥" },
-    open: { kn: "ಆಹ್ವಾನ ತೆರೆಯಿರಿ", en: "Open Invitation" },
+    open: { kn: "ಆಹ್ವಾನ ಪತ್ರಿಕೆ", en: "Wedding Invitation" },
     tagline: { kn: "ವಿವಾಹ ಮಹೋತ್ಸವದ ಆಮಂತ್ರಣ", en: "Wedding Invitation" },
     weds: { kn: "ಮತ್ತು", en: "weds" },
     cdLabel: { kn: "ಶುಭ ಮುಹೂರ್ತಕ್ಕೆ ಉಳಿದಿರುವ ಸಮಯ", en: "Time left for the auspicious day" },
