@@ -165,3 +165,24 @@ window.addEventListener("resize", deityUpdate);
 
 // ---------- Start ----------
 render();
+
+// ---------- Flower garlands ----------
+document.querySelectorAll(".garland").forEach((g, gi) => {
+  const pattern = ["orange", "yellow", "orange", "rose", "yellow", "orange"];
+  let parent = g;
+  for (let s = 0; s < 3; s++) {
+    const seg = document.createElement("div");
+    seg.className = "seg";
+    seg.style.setProperty("--d", `${-(s * 0.4) - gi * 0.9}s`);
+    for (let i = 0; i < 3; i++) {
+      const f = document.createElement("i");
+      f.className = "fl " + pattern[(s * 3 + i + gi) % pattern.length];
+      seg.appendChild(f);
+    }
+    parent.appendChild(seg);
+    parent = seg;
+  }
+  const tassel = document.createElement("b");
+  tassel.className = "tassel";
+  parent.appendChild(tassel);
+});
