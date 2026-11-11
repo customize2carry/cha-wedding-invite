@@ -39,9 +39,11 @@
 
   <main id="invite" class="hidden">
 
+    <!-- Mango-leaf toran fixed at the top -->
+    <div class="toran toran-fixed"></div>
+
     <!-- 1. HERO -->
     <section class="sec sec-hero">
-      <div class="toran"></div>
       <div class="inner hero-inner">
         <img class="ganesha reveal" data-img="ganesha" alt="Ganesha" />
         <p class="verse reveal" data-t="verse"></p>
@@ -74,28 +76,35 @@
       </div>
     </section>
 
-    <!-- 3. NOTE -->
+    <!-- 3. FLIP CARD (flips by itself when scrolled into view) -->
     <section class="sec sec-note">
       <div class="inner">
-        <h2 class="reveal" id="noteTitle"></h2>
         <div class="flip reveal" id="flipCard">
           <div class="flip-inner">
-            <div class="flip-front"><p><span class="orn-big">❖</span><br /><span data-t="tapOpen"></span></p></div>
-            <div class="flip-back"><p id="noteText"></p></div>
+            <div class="flip-front">
+              <p><span class="orn-big">❖</span><br /><span class="front-title" data-t="cardFront"></span></p>
+            </div>
+            <div class="flip-back">
+              <div>
+                <p class="fb-name" id="fbGroom"></p>
+                <p class="fb-weds" data-t="weds"></p>
+                <p class="fb-name" id="fbBride"></p>
+                <p class="fb-date" id="fbDate"></p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4. FAMILIES -->
-    <section class="sec sec-family">
+    <!-- 4. FORMAL INVITATION LETTER -->
+    <section class="sec sec-letter">
       <div class="inner">
-        <h2 class="reveal" data-t="familiesTitle"></h2>
-        <div id="families"></div>
+        <div class="letter" id="letter"></div>
       </div>
     </section>
 
-    <!-- 5. EVENTS -->
+    <!-- 5. SCHEDULE -->
     <section class="sec sec-events">
       <div class="inner">
         <h2 class="reveal" data-t="eventsTitle"></h2>
@@ -103,16 +112,31 @@
       </div>
     </section>
 
-    <!-- 6. THANK YOU with two garlands -->
+    <!-- 6. WELL-WISHERS -->
+    <section class="sec sec-family">
+      <div class="inner">
+        <h2 class="reveal" data-t="wishersTitle"></h2>
+        <div id="wishers"></div>
+      </div>
+    </section>
+
+    <!-- 7. THANK YOU + contact + garlands -->
     <section class="sec sec-thanks">
-      <div class="toran flip-down"></div>
       <div class="garland left"></div>
       <div class="garland right"></div>
       <div class="inner">
         <h2 class="reveal" id="tyTitle"></h2>
         <p class="reveal" id="tyText"></p>
-        <p class="sign reveal" id="tySign"></p>
+
+        <div id="contactWrap" class="contact reveal">
+          <p class="c-title" id="cTitle"></p>
+          <p class="c-names" id="cNames"></p>
+          <p class="c-addr" id="cAddr"></p>
+          <button id="cBtn" data-t="contactBtn"></button>
+          <div id="phones" class="phones"></div>
+        </div>
       </div>
+      <div class="garland-bottom" id="gBottom"></div>
     </section>
 
   </main>
