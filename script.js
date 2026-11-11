@@ -19,7 +19,6 @@ const watchReveals = () =>
 // ---------- Render all text ----------
 function render() {
   document.documentElement.lang = lang;
-  document.title = `${t(INVITE.groom)} ${t(INVITE.ui.weds)} ${t(INVITE.bride)}`;
 
   document.querySelectorAll("[data-t]").forEach((el) => {
     el.textContent = t(INVITE.ui[el.dataset.t]);
@@ -27,31 +26,54 @@ function render() {
 
   $("groom").textContent = t(INVITE.groom);
   $("bride").textContent = t(INVITE.bride);
-  $("dateText").textContent = new Date(INVITE.weddingDate).toLocaleDateString(
-    lang === "kn" ? "kn-IN" : "en-IN",
-    { day: "numeric", month: "long", year: "numeric" }
-  );
-  $("noteTitle").textContent = t(INVITE.note.title);
-  $("noteText").textContent = t(INVITE.note.text);
+  $("dateText").textContent = t(INVITE.dateText);
+  $("fbGroom").textContent = t(INVITE.groom);
+  $("fbBride").textContent = t(INVITE.bride);
+  $("fbDate").textContent = t(INVITE.dateText);
+
+  // Formal letter
+  $("letter").innerHTML = INVITE.letter.map((b) =>
+    `<p class="lt lt-${b.type} reveal">${t(b.text)}</p>`).join("");
+
+  // Schedule
+  $("events").innerHTML = INVITE.events.map((e) => {
+    const v = e.venue ? INVITE.venues[e.venue] : null;
+    let venueHtml = "";
+    if (v) {
+      const q = encodeURIComponent(`${t(v.name)} ${t(v.address)}`);
+      const link = v.mapLink || `https://www.google.com/maps/search/?api=1&query=${q}`;
+      venueHtml = `
+        <p><b>${t(v.name)}</b></p>
+        <p>${t(v.address)}</p>
+        <a href="${link}" target="_blank" rel="noopener">${t(INVITE.ui.directions)}</a>`;
+    }
+    return `
+      <div class="card reveal">
+        <h3>${t(e.title)}</h3>
+        <p class="when">${t(e.date)}</p>
+        ${e.time ? `<p class="when">${t(e.time)}</p>` : ""}
+        ${e.note ? `<p>${t(e.note)}</p>` : ""}
+        ${venueHtml}
+      </div>`;
+  }).join("");
+
+  // Well-wishers
+  $("wishers").innerHTML = INVITE.wishers.map((w) =>
+    `<p class="reveal">${t(w)}</p>`).join("");
+
+  // Thank you + contact
   $("tyTitle").textContent = t(INVITE.thankYou.title);
   $("tyText").textContent = t(INVITE.thankYou.text);
-  $("tySign").textContent = t(INVITE.thankYou.signoff);
 
-  $("families").innerHTML = INVITE.families.map((f) => `
-    <div class="card reveal">
-      <h3>${t(f.label)}</h3>
-      <p>${t(f.names)}</p>
-      <p>${t(f.place)}</p>
-    </div>`).join("");
-
-  $("events").innerHTML = INVITE.events.map((e) => `
-    <div class="card reveal">
-      <h3>${t(e.title)}</h3>
-      <p class="when">${t(e.date)} · ${t(e.time)}</p>
-      <p><b>${t(e.venue)}</b></p>
-      <p>${t(e.address)}</p>
-      <a href="${e.mapLink}" target="_blank" rel="noopener">${t(INVITE.ui.directions)}</a>
-    </div>`).join("");
+  const c = INVITE.contact;
+  $("contactWrap").style.display = c.show ? "" : "none";
+  if (c.show) {
+    $("cTitle").textContent = t(c.title);
+    $("cNames").textContent = t(c.names);
+    $("cAddr").textContent = t(c.address);
+    $("phones").innerHTML = c.phones.map((n) =>
+      `<a href="tel:+91${n}">📞 ${n}</a>`).join("");
+  }
 
   document.querySelectorAll(".lang-switch button").forEach((b) =>
     b.classList.toggle("active", b.dataset.lang === lang));
@@ -79,7 +101,7 @@ document.querySelectorAll("img[data-img]").forEach((img) => {
 
 // ---------- Toran (mango leaves + marigold beads) ----------
 document.querySelectorAll(".toran").forEach((el) => {
-  el.innerHTML = Array.from({ length: 15 }, (_, i) =>
+  el.innerHTML = Array.from({ length: 18 }, (_, i) =>
     i % 3 === 1
       ? `<b class="bead" style="--d:${(i * 0.2).toFixed(1)}s"></b>`
       : `<i class="leaf" style="--d:${(i * 0.2).toFixed(1)}s"></i>`
@@ -107,11 +129,23 @@ $("openBtn").addEventListener("click", () => {
   $("invite").classList.remove("hidden");
   document.body.classList.remove("locked");
   startPetals();
-  setTimeout(() => { $("cover").style.display = "none"; }, 1900);
+  setTimeout(() => { $("cover").style.display = "none"; }, 2600);
 });
 
-// ---------- Flip card ----------
-$("flipCard").addEventListener("click", () => $("flipCard").classList.toggle("flipped"));
+// ---------- Flip card: flips by itself when scrolled into view ----------
+const flip = $("flipCard");
+flip.addEventListener("click", () => flip.classList.toggle("flipped"));
+new IntersectionObserver((entries, ob) => {
+  entries.forEach((e) => {
+    if (e.isIntersecting) {
+      setTimeout(() => flip.classList.add("flipped"), 600);
+      ob.disconnect();
+    }
+  });
+}, { threshold: 0.7 }).observe(flip);
+
+// ---------- Contact: tap to show phone numbers ----------
+$("cBtn").addEventListener("click", () => $("phones").classList.toggle("open"));
 
 // ---------- Countdown ----------
 const target = new Date(INVITE.weddingDate).getTime();
@@ -130,7 +164,6 @@ tick();
 setInterval(tick, 1000);
 
 // ---------- Deity scroll effect ----------
-// Fades in and grows -> holds -> shrinks, blurs and fades into the background
 const deitySec = $("deityScroll");
 const deityStage = $("deityStage");
 const deitySticky = $("deitySticky");
@@ -163,9 +196,11 @@ window.addEventListener("scroll", () => {
 }, { passive: true });
 window.addEventListener("resize", deityUpdate);
 
-// ---------- Flower garlands (swaying like in a breeze) ----------
+// ---------- Flower garlands ----------
+const flowerPattern = ["orange", "yellow", "orange", "rose", "yellow", "orange"];
+
+// Side garlands (sway in the breeze)
 document.querySelectorAll(".garland").forEach((g, gi) => {
-  const pattern = ["orange", "yellow", "orange", "rose", "yellow", "orange"];
   let parent = g;
   for (let s = 0; s < 3; s++) {
     const seg = document.createElement("div");
@@ -173,7 +208,7 @@ document.querySelectorAll(".garland").forEach((g, gi) => {
     seg.style.setProperty("--d", `${-(s * 0.4) - gi * 0.9}s`);
     for (let i = 0; i < 3; i++) {
       const f = document.createElement("i");
-      f.className = "fl " + pattern[(s * 3 + i + gi) % pattern.length];
+      f.className = "fl " + flowerPattern[(s * 3 + i + gi) % flowerPattern.length];
       seg.appendChild(f);
     }
     parent.appendChild(seg);
@@ -183,6 +218,20 @@ document.querySelectorAll(".garland").forEach((g, gi) => {
   tassel.className = "tassel";
   parent.appendChild(tassel);
 });
+
+// Bottom garland (drooping arc across the width)
+(function () {
+  const gb = $("gBottom");
+  const N = 13;
+  for (let i = 0; i < N; i++) {
+    const f = document.createElement("i");
+    f.className = "fl " + flowerPattern[i % flowerPattern.length];
+    f.style.left = (i / (N - 1)) * 100 + "%";
+    f.style.top = Math.sin((Math.PI * i) / (N - 1)) * 36 + "px";
+    f.style.setProperty("--d", `${-i * 0.35}s`);
+    gb.appendChild(f);
+  }
+})();
 
 // ---------- Start ----------
 render();
