@@ -25,9 +25,9 @@ h1, h2 { font-weight: 700; color: var(--maroon); }
 .verse { color: var(--gold); font-weight: 600; margin: 8px 0; }
 .img-fallback { font-size: 64px; color: var(--gold); display: block; }
 
-/* LANGUAGE SWITCH */
+/* LANGUAGE SWITCH (sits just below the toran) */
 .lang-switch {
-  position: fixed; top: calc(10px + env(safe-area-inset-top, 0px)); right: 10px; z-index: 40;
+  position: fixed; top: calc(50px + env(safe-area-inset-top, 0px)); right: 10px; z-index: 40;
   display: flex; background: rgba(255, 246, 226, .95);
   border: 1.5px solid var(--gold); border-radius: 22px; overflow: hidden;
   box-shadow: 0 2px 10px rgba(0,0,0,.25);
@@ -56,18 +56,47 @@ h1, h2 { font-weight: 700; color: var(--maroon); }
 #cover {
   position: fixed; inset: 0; z-index: 30;
   display: flex; align-items: center; justify-content: center;
-  background: #3a0a12;
+  background: #2a0610;
 }
+/* gold valance at the top */
+#cover::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 48px; z-index: 3;
+  background:
+    radial-gradient(circle at 50% 0, #e0b93e 0 19px, transparent 20px) 0 10px / 40px 40px repeat-x,
+    linear-gradient(180deg, #8a6a10, #f0cf68 45%, #8a6a10) top / 100% 12px no-repeat;
+  filter: drop-shadow(0 4px 4px rgba(0,0,0,.4));
+  transition: opacity 1s ease .8s;
+}
+#cover.open::before { opacity: 0; }
 .curtain {
   position: absolute; top: 0; bottom: 0; width: 50%;
-  background: repeating-linear-gradient(90deg, #7a1f2b 0 18px, #932838 18px 36px);
-  border-bottom: 10px solid var(--gold);
-  transition: transform 1.8s ease;
+  background: repeating-linear-gradient(90deg, #5e121e 0 14px, #9a2a3b 14px 28px, #7a1f2b 28px 42px);
 }
-.curtain.left  { left: 0;  border-right: 4px solid var(--gold); }
-.curtain.right { right: 0; border-left: 4px solid var(--gold); }
-#cover.open .curtain.left  { transform: translateX(-100%); }
-#cover.open .curtain.right { transform: translateX(100%); }
+.curtain::before {            /* soft shading */
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.45), transparent 28%, transparent 70%, rgba(0,0,0,.35));
+}
+.curtain::after {             /* gold fringe at the bottom */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 26px;
+  background: repeating-linear-gradient(90deg, #e0b93e 0 3px, #8a6a10 3px 6px);
+  border-top: 3px solid var(--gold);
+}
+.curtain.left  { left: 0;  border-right: 5px solid var(--gold); transform-origin: left center; }
+.curtain.right { right: 0; border-left: 5px solid var(--gold);  transform-origin: right center; }
+#cover.open .curtain.left  { animation: openL 2.4s cubic-bezier(.65, 0, .35, 1) forwards; }
+#cover.open .curtain.right { animation: openR 2.4s cubic-bezier(.65, 0, .35, 1) forwards; }
+@keyframes openL {
+  0%   { transform: translateX(0) skewX(0); }
+  35%  { transform: translateX(-20%) skewX(2.5deg); }
+  70%  { transform: translateX(-65%) skewX(-1.5deg); }
+  100% { transform: translateX(-102%) skewX(0); }
+}
+@keyframes openR {
+  0%   { transform: translateX(0) skewX(0); }
+  35%  { transform: translateX(20%) skewX(-2.5deg); }
+  70%  { transform: translateX(65%) skewX(1.5deg); }
+  100% { transform: translateX(102%) skewX(0); }
+}
 #cover.open .cover-content { opacity: 0; }
 .cover-content {
   position: relative; z-index: 2; transition: opacity .8s;
@@ -100,7 +129,7 @@ h2::after {
 /* 1. HERO — cream + rotating mandala */
 .sec-hero {
   min-height: 100svh; display: flex; align-items: center; justify-content: center;
-  padding-top: 90px; overflow: hidden;
+  padding-top: 110px; overflow: hidden;
   background: radial-gradient(circle at 50% 30%, #fffaf0, #f6e3b4 60%, #ecd08a);
 }
 .sec-hero::before {
@@ -112,7 +141,7 @@ h2::after {
   animation: spin 140s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-.hero-inner h1 { font-size: clamp(36px, 10vw, 50px); line-height: 1.35; margin: 12px 0; }
+.hero-inner h1 { font-size: clamp(30px, 8.5vw, 44px); line-height: 1.4; margin: 12px 0; }
 .hero-inner h1 em { display: block; font-size: 22px; color: #9a6b00; font-weight: 500; font-style: normal; }
 .shimmer {
   display: block;
@@ -134,20 +163,22 @@ h2::after {
 .scroll-hint { margin-top: 34px; font-size: 14px; opacity: .7; animation: bounce 1.5s infinite; }
 @keyframes bounce { 50% { transform: translateY(7px); } }
 
-/* TORAN (mango leaves + marigold beads) */
+/* TORAN — fixed at the top of the screen */
 .toran {
-  position: absolute; top: 0; left: 0; right: 0; height: 52px; z-index: 2;
   display: flex; justify-content: space-around; align-items: flex-start;
-  border-top: 5px solid var(--gold);
 }
-.toran.flip-down { top: auto; bottom: 0; transform: scaleY(-1); }
+.toran-fixed {
+  position: fixed; top: 0; left: 0; right: 0; height: 44px; z-index: 20;
+  pointer-events: none; border-top: 5px solid var(--gold);
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .25));
+}
 .leaf {
-  width: 20px; height: 40px; border-radius: 0 0 60% 60%;
+  width: 16px; height: 32px; border-radius: 0 0 60% 60%;
   background: linear-gradient(180deg, #2f6b3b, #6fb24a);
   transform-origin: top center; animation: sway 3s ease-in-out var(--d) infinite alternate;
 }
 .bead {
-  width: 16px; height: 16px; margin-top: 16px; border-radius: 50%;
+  width: 13px; height: 13px; margin-top: 10px; border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, #ffc233, #f08a00);
   transform-origin: top center; animation: sway 3s ease-in-out var(--d) infinite alternate;
 }
@@ -156,8 +187,7 @@ h2::after {
 /* 2. DEITIES — scroll driven */
 .sec-deity {
   position: relative; height: 280vh;
-  background:
-    radial-gradient(circle at 50% 40%, #8a1c2b 0%, #4a0d18 65%, #2a0610 100%);
+  background: radial-gradient(circle at 50% 40%, #8a1c2b 0%, #4a0d18 65%, #2a0610 100%);
   border-bottom: 8px double var(--gold);
 }
 .sec-deity::before {
@@ -184,25 +214,58 @@ h2::after {
 .deity-img { width: min(80vw, 380px); max-height: 60vh; object-fit: contain; filter: drop-shadow(0 0 24px rgba(245, 215, 110, .6)); }
 .deity-caption { margin-top: 18px; max-width: 420px; color: var(--gold-light); font-size: 20px; font-weight: 600; line-height: 1.6; }
 
-/* 3. NOTE — haldi yellow */
+/* 3. FLIP CARD — haldi yellow */
 .sec-note {
   background:
     radial-gradient(circle, rgba(122, 31, 43, .16) 2px, transparent 3px) 0 0 / 28px 28px,
     linear-gradient(160deg, #ffd23f, #f7b500);
 }
-.flip { perspective: 1000px; height: 270px; cursor: pointer; }
-.flip-inner { position: relative; width: 100%; height: 100%; transition: transform .9s; transform-style: preserve-3d; }
+.flip { perspective: 1000px; height: 320px; cursor: pointer; }
+.flip-inner { position: relative; width: 100%; height: 100%; transition: transform 1.1s; transform-style: preserve-3d; }
 .flip.flipped .flip-inner { transform: rotateY(180deg); }
 .flip-front, .flip-back {
   position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
   display: flex; align-items: center; justify-content: center;
   padding: 24px; border-radius: 16px; border: 3px double var(--gold);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .25);
 }
-.flip-front { background: var(--maroon); color: var(--gold-light); font-size: 20px; }
-.orn-big { font-size: 36px; display: inline-block; animation: pulse 2s infinite; }
-.flip-back { background: #fffdf6; transform: rotateY(180deg); line-height: 1.8; font-size: 18px; }
+.flip-front { background: var(--maroon); color: var(--gold-light); }
+.front-title { font-size: 34px; font-weight: 700; }
+.orn-big { font-size: 40px; display: inline-block; animation: pulse 2s infinite; }
+.flip-back { background: #fffdf6; transform: rotateY(180deg); }
+.fb-name { font-size: 26px; font-weight: 700; color: var(--maroon); line-height: 1.5; }
+.fb-weds { color: #9a6b00; margin: 4px 0; }
+.fb-date { margin-top: 14px; font-weight: 700; color: #9a6b00; }
 
-/* 4. FAMILIES — kumkum red */
+/* 4. LETTER — parchment */
+.sec-letter { background: linear-gradient(180deg, #fffdf4, #f7ecd0); }
+.letter {
+  background: #fffdf6; border: 3px double var(--gold); border-radius: 8px;
+  padding: 30px 20px; position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .18), inset 0 0 40px rgba(201, 162, 39, .12);
+}
+.letter::before, .letter::after {
+  content: "❖ ✦ ❖"; display: block; color: var(--gold); letter-spacing: 8px; font-size: 16px;
+}
+.letter::before { margin-bottom: 14px; }
+.letter::after { margin-top: 18px; }
+.lt { margin: 10px 0; line-height: 1.8; }
+.lt-verse { color: #9a6b00; font-weight: 700; font-size: 16px; margin: 4px 0; }
+.lt-shloka { font-size: 15px; font-style: italic; color: #6b4a00; }
+.lt-name { color: var(--maroon); font-weight: 700; font-size: 24px; line-height: 1.5; }
+.lt-sub { font-size: 16px; opacity: .85; margin-top: -4px; }
+.lt-para { font-size: 17px; }
+.lt-title { color: #9a6b00; font-weight: 700; margin-top: 24px; }
+
+/* 5. SCHEDULE — mango-leaf green */
+.sec-events {
+  background:
+    radial-gradient(circle, rgba(245, 215, 110, .22) 1.5px, transparent 2.5px) 0 0 / 26px 26px,
+    linear-gradient(180deg, #1f4d2b, #2f6b3b);
+}
+.sec-events h2 { color: var(--cream); }
+
+/* 6. WELL-WISHERS — kumkum red */
 .sec-family {
   background:
     repeating-linear-gradient(45deg, rgba(245, 215, 110, .13) 0 2px, transparent 2px 24px),
@@ -210,14 +273,7 @@ h2::after {
     linear-gradient(180deg, #a3182b, #7a1220);
 }
 .sec-family h2 { color: var(--gold-light); }
-
-/* 5. EVENTS — mango-leaf green */
-.sec-events {
-  background:
-    radial-gradient(circle, rgba(245, 215, 110, .22) 1.5px, transparent 2.5px) 0 0 / 26px 26px,
-    linear-gradient(180deg, #1f4d2b, #2f6b3b);
-}
-.sec-events h2 { color: var(--cream); }
+.sec-family .inner p { color: var(--cream); line-height: 1.8; margin: 12px 0; font-size: 18px; }
 
 /* CARDS */
 .card {
@@ -238,16 +294,30 @@ h2::after {
 }
 .card a:active { transform: scale(.95); }
 
-/* 6. THANK YOU — saffron */
+/* 7. THANK YOU — saffron */
 .sec-thanks {
-  padding-top: 90px; padding-bottom: 110px; border-bottom: none;
+  padding-top: 90px; padding-bottom: 130px; border-bottom: none; overflow: hidden;
   background: linear-gradient(180deg, #ff9f1c, #ffd17a 55%, #fff3d6);
 }
 .sec-thanks .inner { padding: 0 46px; }
 .sec-thanks p { line-height: 1.8; font-size: 19px; }
-.sign { margin-top: 16px; color: var(--maroon); font-weight: 700; }
 
-/* TWO FLOWER GARLANDS */
+.contact { margin-top: 30px; padding-top: 22px; border-top: 2px dotted var(--maroon); }
+.c-title { color: #9a6b00; font-weight: 700; }
+.c-names { color: var(--maroon); font-weight: 700; }
+.c-addr { font-size: 16px !important; }
+#cBtn {
+  margin-top: 12px; background: var(--maroon); color: #fff; border: none;
+  padding: 10px 24px; border-radius: 24px; font: inherit; font-size: 16px; cursor: pointer;
+}
+.phones { display: none; flex-direction: column; align-items: center; gap: 8px; margin-top: 12px; }
+.phones.open { display: flex; }
+.phones a {
+  background: #fffdf6; color: var(--maroon); text-decoration: none; font-weight: 700;
+  border: 1.5px solid var(--gold); border-radius: 22px; padding: 8px 20px;
+}
+
+/* SIDE GARLANDS (sway in the breeze) */
 .garland {
   position: absolute; top: 0; z-index: 1;
   display: flex; flex-direction: column; align-items: center;
@@ -255,7 +325,7 @@ h2::after {
 }
 .garland.left  { left: 10px; }
 .garland.right { right: 10px; --t: 4.2s; }
-.garland::before {            /* gold hook at the top */
+.garland::before {
   content: ""; width: 6px; height: 14px; background: var(--gold);
   border-radius: 0 0 4px 4px;
 }
@@ -282,6 +352,20 @@ h2::after {
   width: 14px; height: 30px; margin-top: -2px;
   background: linear-gradient(180deg, #c9a227, #8a6a10);
   border-radius: 3px 3px 50% 50%;
+}
+
+/* BOTTOM GARLAND (full width, drooping) */
+.garland-bottom {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: min(100%, 640px); height: 80px; z-index: 1;
+}
+.garland-bottom .fl {
+  position: absolute; margin: 0 0 0 -13px;
+  animation: bob 3.4s ease-in-out var(--d, 0s) infinite alternate;
+}
+@keyframes bob {
+  from { transform: translateY(0) rotate(-4deg); }
+  to   { transform: translateY(5px) rotate(4deg); }
 }
 
 /* SCROLL REVEAL */
